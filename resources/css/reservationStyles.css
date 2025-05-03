@@ -1,0 +1,292 @@
+/* Variables */
+:root {
+    --primary-color: #6366F1;
+    --primary-hover: #4F46E5;
+    --secondary-color: #F3F4F6;
+    --text-color: #374151;
+    --border-color: #E5E7EB;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Formulario principal */
+.container-form {
+    background-color: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+
+/* Título y subtítulo */
+.form-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1.2;
+}
+
+.form-subtitle {
+    font-size: 1.125rem;
+    color: #6B7280;
+    margin-top: 0.5rem;
+}
+
+/* Indicador de pasos */
+.steps-indicator {
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    color: #9CA3AF;
+}
+
+.step.active {
+    color: var(--primary-color);
+}
+
+.step-number {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #F3F4F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-right: 0.75rem;
+}
+
+.step.active .step-number {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.step-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background-color: #E5E7EB;
+    margin: 0 1rem;
+}
+
+/* Campos del formulario */
+.form-field {
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    width: 100%;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.input-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+}
+
+textarea.form-input {
+    padding-top: 0.75rem;
+}
+
+.input-icon.top-3 {
+    top: 1rem;
+    transform: none;
+}
+
+/* Sección de imagen */
+.image-preview {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+}
+
+/* Resumen de precios */
+.price-summary {
+    background-color: #F9FAFB;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Botones */
+.submit-btn, .cancel-btn {
+    padding: 0.875rem 1.75rem;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.submit-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.submit-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.cancel-btn {
+    background-color: white;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+}
+
+.cancel-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .container-form {
+        padding: 1.5rem;
+    }
+    
+    .form-title {
+        font-size: 1.875rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .steps-indicator {
+        display: none;
+    }
+    
+    .form-title {
+        font-size: 1.5rem;
+    }
+    
+    .submit-btn, .cancel-btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .flex.justify-end {
+        flex-direction: column-reverse;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container-form {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Tooltips */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #374151;
+    color: #fff;
+    text-align: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.875rem;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Estados de validación */
+.form-input.is-invalid {
+    border-color: #EF4444;
+}
+
+.form-input.is-valid {
+    border-color: #10B981;
+}
+
+.error-message {
+    color: #EF4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Loading state */
+.submit-btn:disabled {
+    background-color: #9CA3AF;
+    cursor: not-allowed;
+}
+
+.submit-btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.submit-btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
