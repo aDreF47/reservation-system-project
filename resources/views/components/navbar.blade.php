@@ -29,10 +29,11 @@
             <div class="hidden md:flex items-center space-x-4">
                 @guest
                     <a href="{{ route('login') }}"
-                        class="px-5 py-2 border border-white hover:bg-white hover:text-blue-900 rounded-md transition duration-300">Iniciar
-                        Sesión</a>
+                        class="px-5 py-2 border border-white hover:bg-white hover:text-blue-900 rounded-md transition duration-300">
+                        Iniciar Sesión</a>
                     <a href="{{ route('register') }}"
-                        class="px-5 py-2 bg-white text-blue-900 hover:bg-opacity-90 rounded-md transition duration-300">Registrarse</a>
+                        class="px-5 py-2 bg-white text-blue-900 hover:bg-opacity-90 rounded-md transition duration-300">
+                        Registrarse</a>
                 @else
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center text-white focus:outline-none">
@@ -44,8 +45,8 @@
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                            @if (Auth::user()->isAdmin ?? false)
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                            @if (Auth::user()->isAdmin())
                                 <a href="/admin/dashboard" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Panel
                                     Admin</a>
                             @else
@@ -105,7 +106,7 @@
                 <div class="pt-4 mt-4 border-t border-blue-700">
                     <span class="block text-gray-300 px-3 pb-2">{{ Auth::user()->name }}</span>
 
-                    @if (Auth::user()->isAdmin ?? false)
+                    @if (Auth::user()->isAdmin())
                         <a href="/admin/dashboard"
                             class="block text-white py-2 font-medium hover:bg-blue-700 rounded px-3">Panel Admin</a>
                     @else

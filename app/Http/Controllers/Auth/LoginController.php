@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -18,12 +19,22 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Autenticación exitosa
-            return redirect()->intended('/admin');
+            return redirect()->intended('/');
         }
 
         // Si la autenticación falla
         return back()->withErrors([
             'email' => 'Estas credenciales no coinciden con nuestros registros.',
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
