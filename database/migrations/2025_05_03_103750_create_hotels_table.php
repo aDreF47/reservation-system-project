@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->integer('stars')->default(0);
             $table->text('description')->nullable();
-            $table->json('images')->nullable();
+            $table->json('main_image')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

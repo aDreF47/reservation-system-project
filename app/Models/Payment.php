@@ -16,30 +16,56 @@ class Payment extends Model
         'payment_method',
         'transaction_id',
         'status',
-        'paid_at'
+        'paid_at',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
-        'paid_at' => 'datetime'
+        'paid_at' => 'datetime',
     ];
 
-    public function reservation(): BelongsTo
+    // Relaciones
+    public function reservation()
     {
         return $this->belongsTo(Reservation::class);
     }
 
-    // Métodos de estado
-    public function markAsCompleted($transactionId = null)
+    // Scopes
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    public function scopeFailed($query)
+    {
+        return $query->where('status', 'failed');
+    }
+
+    // Accessors
+    public function getUserAttribute()
+    {
+        return $this->reservation->user;
+    }
+
+    public function getFormattedAmountAttribute()
+    {
+        return 'S/. ' . number_format($this->amount, 2);
+    }
+
+    // Métodos
+    public function markAsCompleted()
     {
         $this->update([
             'status' => 'completed',
-            'transaction_id' => $transactionId,
             'paid_at' => now()
         ]);
 
-        // Actualizar el estado de pago de la reserva
-        $this->reservation->markAsPaid();
+        $this->reservation->update(['payment_status' => 'paid']);
     }
 
     public function markAsFailed()
@@ -47,14 +73,18 @@ class Payment extends Model
         $this->update(['status' => 'failed']);
     }
 
-    // Scopes
-    public function scopeCompleted($query)
+    public function process()
     {
-        return $query->where('status', 'completed');
-    }
+        // Aquí iría la lógica de procesamiento del pago
+        // Por ejemplo, integración con pasarela de pago
 
-    public function scopePending($query)
-    {
-        return $query->where('status', 'pending');
+        // Simulación simple:
+        if (rand(1, 100) <= 95) { // 95% de éxito
+            $this->markAsCompleted();
+            return true;
+        }
+
+        $this->markAsFailed();
+        return false;
     }
 }

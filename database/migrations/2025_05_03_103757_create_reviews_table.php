@@ -11,14 +11,15 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('reviewable_type'); // Para relación polimórfica
-            $table->unsignedBigInteger('reviewable_id');
+            $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
             $table->integer('rating')->unsigned();
             $table->text('comment')->nullable();
             $table->boolean('approved')->default(false);
             $table->timestamps();
 
-            $table->index(['reviewable_type', 'reviewable_id']);
+            // Índices para mejorar rendimiento
+            $table->index('approved');
+            $table->index('rating');
         });
     }
 

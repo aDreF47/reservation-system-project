@@ -11,8 +11,7 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('reservable_type'); // Para relación polimórfica
-            $table->unsignedBigInteger('reservable_id');
+            $table->foreignId('room_id')->constrained()->onDelete('cascade');
             $table->dateTime('check_in');
             $table->dateTime('check_out');
             $table->integer('guests');
@@ -22,7 +21,9 @@ return new class extends Migration
             $table->text('special_requests')->nullable();
             $table->timestamps();
 
-            $table->index(['reservable_type', 'reservable_id']);
+            // Índices para mejorar búsquedas
+            $table->index(['check_in', 'check_out']);
+            $table->index('status');
         });
     }
 

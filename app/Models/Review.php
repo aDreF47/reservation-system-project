@@ -2,37 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 
 class Review extends Model
 {
-    use HasFactory;
+
 
     protected $fillable = [
         'user_id',
-        'reviewable_type',
-        'reviewable_id',
+        'hotel_id',
         'rating',
         'comment',
-        'approved'
+        'approved',
     ];
 
     protected $casts = [
         'rating' => 'integer',
-        'approved' => 'boolean'
+        'approved' => 'boolean',
     ];
 
-    public function user(): BelongsTo
+    // Relaciones
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function reviewable(): MorphTo
+    public function hotel()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Hotel::class);
     }
 
     // Scopes
@@ -46,6 +44,16 @@ class Review extends Model
         return $query->where('approved', false);
     }
 
+    public function scopeByRating($query, $rating)
+    {
+        return $query->where('rating', $rating);
+    }
+
+    public function scopeRecent($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
+
     // Métodos
     public function approve()
     {
@@ -55,5 +63,15 @@ class Review extends Model
     public function reject()
     {
         $this->delete();
+    }
+
+    public function getRatingStars()
+    {
+        return str_repeat('★', $this->rating) . str_repeat('☆', 5 - $this->rating);
+    }
+
+    public function canBeEditedBy(User $user)
+    {
+        return $this->user_id === $user->id && $this->created_at->isAfter(now()->subHours(24));
     }
 }

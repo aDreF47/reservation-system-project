@@ -14,35 +14,35 @@ class Reservation extends Model
 
     protected $fillable = [
         'user_id',
-        'reservable_type',
-        'reservable_id',
+        'room_id',
         'check_in',
         'check_out',
         'guests',
         'total_price',
         'status',
         'payment_status',
-        'special_requests'
+        'special_requests',
     ];
 
     protected $casts = [
         'check_in' => 'datetime',
         'check_out' => 'datetime',
+        'total_price' => 'decimal:2',
         'guests' => 'integer',
-        'total_price' => 'decimal:2'
     ];
 
-    public function user(): BelongsTo
+    // Relaciones
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function reservable(): MorphTo
+    public function room()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Room::class);
     }
 
-    public function payment(): HasOne
+    public function payment()
     {
         return $this->hasOne(Payment::class);
     }
@@ -58,31 +58,83 @@ class Reservation extends Model
         return $query->where('status', 'confirmed');
     }
 
-    public function scopePaid($query)
+    public function scopeCancelled($query)
     {
-        return $query->where('payment_status', 'paid');
+        return $query->where('status', 'cancelled');
     }
 
-    // Métodos de estado
+    public function scopeCurrent($query)
+    {
+        return $query->where('check_in', '<=', now())
+                    ->where('check_out', '>=', now())
+                    ->where('status', 'confirmed');
+    }
+
+    public function scopeUpcoming($query)
+    {
+        return $query->where('check_in', '>', now())
+                    ->where('status', '!=', 'cancelled');
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('check_out', '<', now());
+    }
+
+    // Accessors
+    public function getNightsAttribute()
+    {
+        return $this->check_in->diffInDays($this->check_out);
+    }
+
+    public function getHotelAttribute()
+    {
+        return $this->room->hotelType->hotel;
+    }
+
+    public function getIsActiveAttribute()
+    {
+        return $this->check_in <= now() && $this->check_out >= now() && $this->status === 'confirmed';
+    }
+
+    public function getCanCancelAttribute()
+    {
+        return $this->status === 'pending' ||
+               ($this->status === 'confirmed' && $this->check_in->isAfter(now()->addDay()));
+    }
+
+    // Métodos
     public function confirm()
     {
-        $this->update(['status' => 'confirmed']);
+        $this->update([
+            'status' => 'confirmed',
+            'payment_status' => 'paid'
+        ]);
+
+        // Si es para hoy, marcar habitación como ocupada
+        if ($this->check_in->isToday()) {
+            $this->room->markAsOccupied();
+        }
     }
 
     public function cancel()
     {
         $this->update(['status' => 'cancelled']);
+
+        if ($this->payment_status === 'paid') {
+            $this->update(['payment_status' => 'refunded']);
+        }
+
+        // Liberar la habitación si estaba ocupada
+        if ($this->is_active) {
+            $this->room->markAsAvailable();
+        }
     }
 
-    public function markAsPaid()
+    public function calculatePrice()
     {
-        $this->update(['payment_status' => 'paid']);
-    }
-
-    // Verificar si puede ser cancelada
-    public function canBeCancelled()
-    {
-        return $this->status !== 'cancelled' &&
-               $this->check_in->isFuture();
+        $nights = $this->nights;
+        $pricePerNight = $this->room->price_per_night;
+        return $nights * $pricePerNight;
     }
 }

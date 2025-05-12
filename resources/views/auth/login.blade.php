@@ -39,7 +39,7 @@
                     class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                 <label for="remember" class="ml-2 block text-sm text-gray-700">Recordar por 30 días</label>
             </div>
-            <a href="{{ route('request_pass') }}" class="text-sm text-indigo-600 hover:text-indigo-800">
+            <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:text-indigo-800">
                 ¿Olvidaste tu contraseña?
             </a>
         </div>

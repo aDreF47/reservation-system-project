@@ -8,16 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('event_venues', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('address');
-            $table->string('city');
+            $table->foreignId('hotel_type_id')->constrained()->onDelete('cascade');
+            $table->string('room_number');
             $table->integer('capacity');
+            $table->decimal('price_per_night', 10, 2);
             $table->json('facilities')->nullable();
-            $table->decimal('price_per_hour', 10, 2);
-            $table->text('description')->nullable();
-            $table->json('images')->nullable();
             $table->boolean('available')->default(true);
             $table->timestamps();
         });
@@ -25,6 +22,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('event_venues');
+        Schema::dropIfExists('rooms');
     }
 };

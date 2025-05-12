@@ -19,40 +19,67 @@ class Hotel extends Model
         'email',
         'stars',
         'description',
-        'images',
-        'active'
+        'main_image',
+        'active',
     ];
 
     protected $casts = [
-        'images' => 'array',
+        'main_image' => 'array',
         'active' => 'boolean',
-        'stars' => 'integer'
+        'stars' => 'integer',
     ];
 
-    public function rooms(): HasMany
+    // Relaciones
+    public function hotelTypes()
     {
-        return $this->hasMany(HotelRoom::class);
+        return $this->hasMany(HotelType::class);
     }
 
-    public function reservations(): MorphMany
+    public function reviews()
     {
-        return $this->morphMany(Reservation::class, 'reservable');
+        return $this->hasMany(Review::class);
     }
 
-    public function reviews(): MorphMany
+    public function rooms()
     {
-        return $this->morphMany(Review::class, 'reviewable');
+        return $this->hasManyThrough(Room::class, HotelType::class);
     }
 
-    // Scope para obtener solo hoteles activos
+    // Scopes
     public function scopeActive($query)
     {
         return $query->where('active', true);
     }
 
-    // Obtener rating promedio
+    public function scopeByStars($query, $stars)
+    {
+        return $query->where('stars', $stars);
+    }
+
+    public function scopeInCity($query, $city)
+    {
+        return $query->where('city', $city);
+    }
+
+    // Accessors
     public function getAverageRatingAttribute()
     {
         return $this->reviews()->where('approved', true)->avg('rating') ?? 0;
+    }
+
+    public function getTotalReviewsAttribute()
+    {
+        return $this->reviews()->where('approved', true)->count();
+    }
+
+    public function getAvailableRoomsCountAttribute()
+    {
+        return $this->rooms()->where('available', true)->count();
+    }
+
+    // Métodos
+    public function getStarsAsText()
+    {
+        return str_repeat('★', $this->stars) . str_repeat('☆', 5 - $this->stars);
     }
 }
