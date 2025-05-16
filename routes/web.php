@@ -27,10 +27,10 @@ use App\Http\Controllers\Admin\AdminController;
 */
 
 // Página principal
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home'); // hecho
 
 // Vista de hoteles públicos
-Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
+Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index'); // hecho
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 Route::get('/hotels/{hotel}/type-room/{idtype}', [TypeRoomController::class, 'show'])->name('hotels.type-room');
 
@@ -41,12 +41,12 @@ Route::get('/hotels/{hotel}/type-room/{idtype}', [TypeRoomController::class, 'sh
 */
 Route::middleware('guest')->group(function () {
     // Login
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login'); //hecho
+    Route::post('/login', [AuthController::class, 'login']); //hecho
 
     // Registro
-    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register'); //hecho
+    Route::post('/register', [AuthController::class, 'register']); //hecho
 
     // Recuperación de contraseña
     Route::get('/password/reset', [AuthController::class, 'showPasswordResetForm'])->name('password.request');
@@ -54,7 +54,7 @@ Route::middleware('guest')->group(function () {
 });
 
 // Logout (disponible para usuarios autenticados)
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth'); //hecho
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +62,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-    Route::get('/admin', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::get('/admin', [AdminAuthController::class, 'showLoginForm'])->name('admin.login'); //hecho prototipo
     Route::post('/admin', [AdminAuthController::class, 'login'])->name('admin.login.post');
 });
 
