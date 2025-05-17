@@ -20,7 +20,10 @@ use App\Http\Controllers\Admin\AdminRoomController;
 use App\Http\Controllers\Admin\AdminReservationController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminReviewController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminAdministratorController;
+use App\Http\Controllers\Admin\AdminProfileController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -108,8 +111,32 @@ Route::middleware(['auth', CheckAdminRole::class])->prefix('admin')->group(funct
 //     Route::put('/hotels/{id}', [AdminHotelController::class, 'update'])->name('admin.hotels.update');
 //     Route::delete('/hotels/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotels.delete');
 
-//     // [... resto de rutas de admin ...]
- });
+// Users
+    Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');           // listar usuarios
+    Route::get('/users/create', [AdminUserController::class, 'create'])->name('admin.users.create');  // formulario crear usuario
+    Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');          // guardar nuevo usuario
+    Route::get('/users/{id}', [AdminUserController::class, 'show'])->name('admin.users.show');       // mostrar usuario
+    Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');  // formulario editar usuario
+    Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');    // actualizar usuario
+    Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');// eliminar usuario
+
+    // administrator
+    Route::get('/administrators', [AdminAdministratorController::class, 'index'])->name('admin.administrators.index');           // listar administrator
+    Route::get('/administrators/create', [AdminAdministratorController::class, 'create'])->name('admin.administrators.create');  // formulario crear rol
+    Route::post('/administrators', [AdminAdministratorController::class, 'store'])->name('admin.administrators.store');          // guardar nuevo rol
+    Route::get('/administrators/{id}', [AdminAdministratorController::class, 'show'])->name('admin.administrators.show');       // mostrar rol
+    Route::get('/administrators/{id}/edit', [AdminAdministratorController::class, 'edit'])->name('admin.administrators.edit');  // formulario editar rol
+    Route::put('/administrators/{id}', [AdminAdministratorController::class, 'update'])->name('admin.administrators.update');    // actualizar rol
+    Route::delete('/administrators/{id}', [AdminAdministratorController::class, 'destroy'])->name('admin.administrators.destroy');// eliminar rol
+
+    // Mostrar formulario para ver o editar perfil
+    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('admin.profile');
+    Route::put('/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+
+    // Opcional: cambiar contraseña (si quieres separarlo)
+    Route::get('/profile/password', [AdminProfileController::class, 'showPasswordForm'])->name('admin.profile.password');
+    Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('admin.profile.password.update');
+});
 
 // /*
 // |--------------------------------------------------------------------------
