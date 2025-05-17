@@ -34,6 +34,18 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index'); 
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 Route::get('/hotels/{hotel}/type-room/{idtype}', [TypeRoomController::class, 'show'])->name('hotels.type-room');
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Rutas de hoteles
+    Route::get('/hotels', [AdminHotelController::class, 'index'])->name('hotels');
+    Route::get('/hotels/create', [AdminHotelController::class, 'create'])->name('hotels.create');
+    Route::post('/hotels', [AdminHotelController::class, 'store'])->name('hotels.store');
+    Route::get('/hotels/{id}', [AdminHotelController::class, 'show'])->name('hotels.show');
+    Route::get('/hotels/{id}/edit', [AdminHotelController::class, 'edit'])->name('hotels.edit');
+    Route::put('/hotels/{id}', [AdminHotelController::class, 'update'])->name('hotels.update');
+    Route::delete('/hotels/{id}', [AdminHotelController::class, 'destroy'])->name('hotels.delete');
+    
+    // Otras rutas...
+});
 /*
 |--------------------------------------------------------------------------
 | RUTAS DE AUTENTICACIÓN PARA CLIENTES
@@ -69,12 +81,13 @@ Route::middleware('guest')->group(function () {
 // Logout de admin
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout')->middleware('auth:admin');
 
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 /*
 |--------------------------------------------------------------------------
 | RUTAS PROTEGIDAS PARA CLIENTES
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:cliente'])->prefix('user')->group(function () {
+/*Route::middleware(['auth', 'role:cliente'])->prefix('user')->group(function () {
     // Reservaciones del cliente
     Route::get('/reservation', [ReservationController::class, 'index'])->name('user.reservations');
     Route::delete('/reservation/{id}', [ReservationController::class, 'destroy'])->name('user.reservation.delete');
@@ -82,16 +95,16 @@ Route::middleware(['auth', 'role:cliente'])->prefix('user')->group(function () {
     // Perfil del cliente
     Route::get('/profile', [ProfileController::class, 'show'])->name('user.profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
-});
+});*/
 
 /*
 |--------------------------------------------------------------------------
 | RUTAS PROTEGIDAS PARA ADMINISTRADORES
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
+//Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+   /* Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Gestión de Reservaciones
     Route::get('/reservation', [AdminReservationController::class, 'index'])->name('admin.reservations');
@@ -106,9 +119,9 @@ Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
     Route::get('/hotels/{id}/edit', [AdminHotelController::class, 'edit'])->name('admin.hotels.edit');
     Route::put('/hotels/{id}', [AdminHotelController::class, 'update'])->name('admin.hotels.update');
     Route::delete('/hotels/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotels.delete');
-
+    */
     // [... resto de rutas de admin ...]
-});
+//});
 
 /*
 |--------------------------------------------------------------------------

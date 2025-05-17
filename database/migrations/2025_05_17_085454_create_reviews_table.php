@@ -6,23 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
-            $table->integer('rating')->unsigned();
+            $table->integer('rating');
             $table->text('comment')->nullable();
             $table->boolean('approved')->default(false);
             $table->timestamps();
-
-            // Índices para mejorar rendimiento
-            $table->index('approved');
-            $table->index('rating');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('reviews');

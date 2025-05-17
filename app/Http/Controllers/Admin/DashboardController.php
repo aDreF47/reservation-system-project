@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index(){
-        return view('Hola aqui los tipos');
+        return view('admin.dashboard');
     }
 }
