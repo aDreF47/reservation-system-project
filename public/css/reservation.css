@@ -1,0 +1,91 @@
+.room-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #fefefe;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.room-images {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.room-images img {
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    object-fit: cover;
+    height: 250px;
+}
+
+.room-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #003580;
+}
+
+.room-hotel {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.room-info p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.room-info strong {
+    color: #444;
+}
+
+.room-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e67e22;
+    margin-top: 15px;
+}
+
+.reservation-form {
+    margin-top: 30px;
+    max-width: 500px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.btn-reserve {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-reserve:hover {
+    background-color: #0056b3;
+}

@@ -33,6 +33,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home'); // hecho
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index'); // hecho
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 Route::get('/hotels/{hotel}/type-room/{idtype}', [TypeRoomController::class, 'show'])->name('hotels.type-room');
+Route::get('/hotels/{hotel}/{idtype}/reservation', [ReservationController::class, 'create'])->name('reservation.create');
+Route::post('/reservation', [ReservationController::class, 'store'])->name('reservations.store');
 
 /*
 |--------------------------------------------------------------------------

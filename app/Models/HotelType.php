@@ -70,4 +70,8 @@ class HotelType extends Model
     {
         return $this->amenities ? explode(',', $this->amenities) : [];
     }
+    public function roomImages()
+    {
+        return $this->hasMany(RoomImage::class, 'room_id');
+    }
 }
