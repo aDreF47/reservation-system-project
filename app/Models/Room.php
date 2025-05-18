@@ -9,93 +9,79 @@ class Room extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'hotel_type_id',
+        'room_type_id',
         'room_number',
-        'capacity',
-        'price_per_night',
-        'facilities',
+        'floor',
         'available',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
-        'facilities' => 'array',
-        'available' => 'boolean',
-        'price_per_night' => 'decimal:2',
-        'capacity' => 'integer',
+        'floor' => 'integer',
+        'available' => 'integer',
     ];
 
-    // Relaciones
-    public function hotelType()
+    /**
+     * Get the room type that owns the room.
+     */
+    public function roomType()
     {
-        return $this->belongsTo(HotelType::class);
+        return $this->belongsTo(RoomType::class);
     }
 
-    public function roomImages()
+    /**
+     * Get the hotel through the room type.
+     */
+    public function hotel()
     {
-        return $this->hasMany(RoomImage::class);
+        return $this->hasOneThrough(Hotel::class, RoomType::class, 'id', 'id', 'room_type_id', 'hotel_id');
     }
 
+    /**
+     * Get the reservations for the room.
+     */
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
     }
 
-    // Scopes
-    public function scopeAvailable($query)
-    {
-        return $query->where('available', true);
-    }
-
-    public function scopeByCapacity($query, $capacity)
-    {
-        return $query->where('capacity', '>=', $capacity);
-    }
-
-    public function scopeByPriceRange($query, $min, $max)
-    {
-        return $query->whereBetween('price_per_night', [$min, $max]);
-    }
-
-    // Accessors
-    public function getHotelAttribute()
-    {
-        return $this->hotelType->hotel;
-    }
-
-    public function getFeaturedImageAttribute()
-    {
-        return $this->roomImages()->where('is_featured', true)->first();
-    }
-
-    public function getFloorAttribute()
-    {
-        return substr($this->room_number, 0, -2);
-    }
-
-    // Métodos
+    /**
+     * Check if room is available for a given date range.
+     */
     public function isAvailableForDates($checkIn, $checkOut)
     {
+        if (!$this->available) {
+            return 1;
+        }
+
         return !$this->reservations()
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($checkIn, $checkOut) {
                 $query->whereBetween('check_in', [$checkIn, $checkOut])
                     ->orWhereBetween('check_out', [$checkIn, $checkOut])
-                    ->orWhere(function ($q) use ($checkIn, $checkOut) {
-                        $q->where('check_in', '<=', $checkIn)
-                          ->where('check_out', '>=', $checkOut);
+                    ->orWhere(function ($query) use ($checkIn, $checkOut) {
+                        $query->where('check_in', '<=', $checkIn)
+                            ->where('check_out', '>=', $checkOut);
                     });
             })
             ->exists();
     }
 
-    public function markAsOccupied()
+    /**
+     * Scope a query to only include available rooms.
+     */
+    public function scopeAvailable($query)
     {
-        $this->update(['available' => false]);
-    }
-
-    public function markAsAvailable()
-    {
-        $this->update(['available' => true]);
+        return $query->where('available', 1);
     }
 }

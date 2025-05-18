@@ -1,6 +1,6 @@
 <div class="flex rounded-lg shadow-xl overflow-hidden bg-white border border-gray-200">
     <!-- Imagen del hotel -->
-    <img src="{{ $hotel->image_url }}" alt="Imagen del hotel" class="w-1/3 h-48 object-cover">
+    <img src="{{ $hotel->main_image }}" alt="Imagen del hotel" class="w-1/3 h-48 object-cover">
 
     <!-- Contenido del hotel -->
     <div class="p-4 flex flex-col justify-between w-2/3">

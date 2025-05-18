@@ -6,9 +6,10 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
-use App\Http\Controllers\TypeRoomController;
+use App\Http\Controllers\RoomTypeController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 
 use App\Http\Middleware\CheckAdminRole;
 
@@ -37,7 +38,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home'); // hecho
 // Vista de hoteles públicos
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index'); // hecho // lista de hoteles
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show'); // dormitorios del hotel agrupados por tipo
-Route::get('/hotels/{hotel}/{[id]type}', [TypeRoomController::class, 'show'])->name('hotels.type-room');
+Route::get('/room-types/{roomType}', [RoomTypeController::class, 'show'])->name('room_types.show');
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +74,10 @@ Route::middleware('guest')->group(function () {
 
 // Logout de admin
 // Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout')->middleware('auth:admin');
-
+// En routes/web.php
+Route::post('/reviews', [ReviewController::class, 'store'])
+    ->middleware('auth')
+    ->name('reviews.store');
 // /*
 // |--------------------------------------------------------------------------
 // | RUTAS PROTEGIDAS PARA CLIENTES

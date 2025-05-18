@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'reservation_id',
         'amount',
@@ -19,72 +23,45 @@ class Payment extends Model
         'paid_at',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'amount' => 'decimal:2',
         'paid_at' => 'datetime',
     ];
 
-    // Relaciones
+    /**
+     * Get the reservation that owns the payment.
+     */
     public function reservation()
     {
         return $this->belongsTo(Reservation::class);
     }
 
-    // Scopes
-    public function scopePending($query)
-    {
-        return $query->where('status', 'pending');
-    }
-
+    /**
+     * Scope a query to only include completed payments.
+     */
     public function scopeCompleted($query)
     {
         return $query->where('status', 'completed');
     }
 
+    /**
+     * Scope a query to only include pending payments.
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    /**
+     * Scope a query to only include failed payments.
+     */
     public function scopeFailed($query)
     {
         return $query->where('status', 'failed');
-    }
-
-    // Accessors
-    public function getUserAttribute()
-    {
-        return $this->reservation->user;
-    }
-
-    public function getFormattedAmountAttribute()
-    {
-        return 'S/. ' . number_format($this->amount, 2);
-    }
-
-    // Métodos
-    public function markAsCompleted()
-    {
-        $this->update([
-            'status' => 'completed',
-            'paid_at' => now()
-        ]);
-
-        $this->reservation->update(['payment_status' => 'paid']);
-    }
-
-    public function markAsFailed()
-    {
-        $this->update(['status' => 'failed']);
-    }
-
-    public function process()
-    {
-        // Aquí iría la lógica de procesamiento del pago
-        // Por ejemplo, integración con pasarela de pago
-
-        // Simulación simple:
-        if (rand(1, 100) <= 95) { // 95% de éxito
-            $this->markAsCompleted();
-            return true;
-        }
-
-        $this->markAsFailed();
-        return false;
     }
 }

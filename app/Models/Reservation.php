@@ -4,137 +4,100 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Reservation extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'user_id',
         'room_id',
         'check_in',
         'check_out',
-        'guests',
+        'guest',
         'total_price',
         'status',
         'payment_status',
-        'special_requests',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'check_in' => 'datetime',
         'check_out' => 'datetime',
+        'guest' => 'integer',
         'total_price' => 'decimal:2',
-        'guests' => 'integer',
     ];
 
-    // Relaciones
+    /**
+     * Get the user that owns the reservation.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the room that is reserved.
+     */
     public function room()
     {
         return $this->belongsTo(Room::class);
     }
 
-    public function payment()
+    /**
+     * Get the payment for the reservation.
+     */
+    public function payments()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasMany(Payment::class);
     }
 
-    // Scopes
-    public function scopePending($query)
-    {
-        return $query->where('status', 'pending');
-    }
-
-    public function scopeConfirmed($query)
-    {
-        return $query->where('status', 'confirmed');
-    }
-
-    public function scopeCancelled($query)
-    {
-        return $query->where('status', 'cancelled');
-    }
-
-    public function scopeCurrent($query)
-    {
-        return $query->where('check_in', '<=', now())
-                    ->where('check_out', '>=', now())
-                    ->where('status', 'confirmed');
-    }
-
-    public function scopeUpcoming($query)
-    {
-        return $query->where('check_in', '>', now())
-                    ->where('status', '!=', 'cancelled');
-    }
-
-    public function scopePast($query)
-    {
-        return $query->where('check_out', '<', now());
-    }
-
-    // Accessors
+    /**
+     * Calculate the number of nights.
+     */
     public function getNightsAttribute()
     {
         return $this->check_in->diffInDays($this->check_out);
     }
 
-    public function getHotelAttribute()
+    /**
+     * Check if reservation can be cancelled.
+     */
+    public function canBeCancelled()
     {
-        return $this->room->hotelType->hotel;
+        return $this->status !== 'cancelled' && $this->check_in->isFuture();
     }
 
-    public function getIsActiveAttribute()
+    /**
+     * Scope a query to only include pending reservations.
+     */
+    public function scopePending($query)
     {
-        return $this->check_in <= now() && $this->check_out >= now() && $this->status === 'confirmed';
+        return $query->where('status', 'pending');
     }
 
-    public function getCanCancelAttribute()
+    /**
+     * Scope a query to only include confirmed reservations.
+     */
+    public function scopeConfirmed($query)
     {
-        return $this->status === 'pending' ||
-               ($this->status === 'confirmed' && $this->check_in->isAfter(now()->addDay()));
+        return $query->where('status', 'confirmed');
     }
 
-    // Métodos
-    public function confirm()
+    /**
+     * Scope a query to only include cancelled reservations.
+     */
+    public function scopeCancelled($query)
     {
-        $this->update([
-            'status' => 'confirmed',
-            'payment_status' => 'paid'
-        ]);
-
-        // Si es para hoy, marcar habitación como ocupada
-        if ($this->check_in->isToday()) {
-            $this->room->markAsOccupied();
-        }
-    }
-
-    public function cancel()
-    {
-        $this->update(['status' => 'cancelled']);
-
-        if ($this->payment_status === 'paid') {
-            $this->update(['payment_status' => 'refunded']);
-        }
-
-        // Liberar la habitación si estaba ocupada
-        if ($this->is_active) {
-            $this->room->markAsAvailable();
-        }
-    }
-
-    public function calculatePrice()
-    {
-        $nights = $this->nights;
-        $pricePerNight = $this->room->price_per_night;
-        return $nights * $pricePerNight;
+        return $query->where('status', 'cancelled');
     }
 }

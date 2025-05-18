@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
-            $table->integer('rating')->unsigned();
+            $table->decimal('rating',2,1);
             $table->text('comment')->nullable();
-            $table->boolean('approved')->default(false);
+            $table->integer('approved')->default(0);
             $table->timestamps();
 
             // Índices para mejorar rendimiento

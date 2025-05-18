@@ -34,10 +34,10 @@ class HotelFactory extends Factory
             'city' => $this->faker->randomElement($cities), // Ciudad aleatoria de las capitales
             'phone' => '01-' . $this->faker->numberBetween(1000000, 9999999), // Teléfono en formato peruano
             'email' => $this->faker->safeEmail, // Email seguro
-            'stars' => $this->faker->numberBetween(3, 5),  // Estrellas entre 3 y 5
+            'stars' => $this->faker->numberBetween(2, 5),  // Estrellas entre 3 y 5
             'description' => $this->faker->paragraph, // Descripción aleatoria
             'main_image' => json_encode([$this->faker->imageUrl(640, 480, 'business')]), // Imagen aleatoria
-            'active' => true, // Activo
+            'active' => 1, // Activo
         ];
     }
 }

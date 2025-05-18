@@ -17,7 +17,8 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
-        'address'
+        'address',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -47,11 +48,6 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
-    }
-
-    public function isCliente(): bool
-    {
-        return $this->role === 'cliente';
     }
 
     // Obtener reservas activas

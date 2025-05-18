@@ -24,15 +24,14 @@ class Hotel extends Model
     ];
 
     protected $casts = [
-        'main_image' => 'array',
-        'active' => 'boolean',
+        'active' => 'integer',
         'stars' => 'integer',
     ];
 
     // Relaciones
-    public function hotelTypes()
+    public function roomTypes()
     {
-        return $this->hasMany(HotelType::class);
+        return $this->hasMany(RoomType::class);
     }
 
     public function reviews()
@@ -42,39 +41,21 @@ class Hotel extends Model
 
     public function rooms()
     {
-        return $this->hasManyThrough(Room::class, HotelType::class);
-    }
-
-    // Scopes
-    public function scopeActive($query)
-    {
-        return $query->where('active', true);
-    }
-
-    public function scopeByStars($query, $stars)
-    {
-        return $query->where('stars', $stars);
-    }
-
-    public function scopeInCity($query, $city)
-    {
-        return $query->where('city', $city);
+        return $this->hasManyThrough(Room::class, RoomType::class);
     }
 
     // Accessors
-    public function getAverageRatingAttribute()
+    public function averageRating()
     {
-        return $this->reviews()->where('approved', true)->avg('rating') ?? 0;
+        return $this->reviews()->where('approved', 1)->avg('rating') ?? 0;
     }
 
-    public function getTotalReviewsAttribute()
+    /**
+     * Scope a query to only include active hotels.
+     */
+    public function scopeActive($query)
     {
-        return $this->reviews()->where('approved', true)->count();
-    }
-
-    public function getAvailableRoomsCountAttribute()
-    {
-        return $this->rooms()->where('available', true)->count();
+        return $query->where('active', 1);
     }
 
     // Métodos

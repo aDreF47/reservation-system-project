@@ -14,11 +14,10 @@ return new class extends Migration
             $table->foreignId('room_id')->constrained()->onDelete('cascade');
             $table->dateTime('check_in');
             $table->dateTime('check_out');
-            $table->integer('guests');
+            $table->integer('guest');
             $table->decimal('total_price', 10, 2);
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->enum('payment_status', ['pending', 'paid', 'refunded'])->default('pending');
-            $table->text('special_requests')->nullable();
             $table->timestamps();
 
             // Índices para mejorar búsquedas
