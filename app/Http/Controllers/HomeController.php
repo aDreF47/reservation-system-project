@@ -34,7 +34,7 @@ class HomeController extends Controller
         $userReservations = null;
         $pendingReservations = null;
 
-        if (Auth::check()) {
+    /*    if (Auth::check()) {
             $userReservations = Auth::user()->reservations()
                 ->with(['room.hotelType.hotel'])
                 ->orderBy('check_in', 'desc')
@@ -44,7 +44,7 @@ class HomeController extends Controller
             $pendingReservations = Auth::user()->reservations()
                 ->where('status', 'pending')
                 ->count();
-        }
+        }*/
 
         // Obtener reseñas recientes
         $recentReviews = Review::where('approved', true)
