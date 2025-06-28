@@ -25,7 +25,7 @@ class ReviewController extends Controller
             'hotel_id' => $validated['hotel_id'],
             'rating' => $validated['rating'],
             'comment' => $validated['comment'],
-            'approved' => 0, // Por defecto las reseñas requieren aprobación
+            'approved' => 1, // Por defecto las reseñas no requieren aprobación
         ]);
 
         return back()->with('success', 'Tu comentario ha sido enviado y está pendiente de aprobación.');

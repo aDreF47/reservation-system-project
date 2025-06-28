@@ -103,9 +103,16 @@ Route::middleware(['auth', CheckAdminRole::class])->prefix('admin')->group(funct
 
     // Gestión de Reservaciones
     Route::get('/reservation', [AdminReservationController::class, 'index'])->name('admin.reservations');
+    Route::post('/reservation', [AdminReservationController::class, 'store'])->name('admin.reservations.store');
+    Route::get('/reservation/{id}', [AdminReservationController::class, 'show'])->name('admin.reservations.show');
+    Route::put('/reservation/{id}/status', [AdminReservationController::class, 'updateStatus'])->name('admin.reservations.update-status');
+
 //     Route::get('/reservation/{id}', [AdminReservationController::class, 'show'])->name('admin.reservation.show');
 //     Route::delete('/reservation/{id}', [AdminReservationController::class, 'destroy'])->name('admin.reservation.delete');
 
+    Route::get('/reservations/room-types/{hotel}', [AdminReservationController::class, 'getRoomTypes']);
+    Route::get('/reservations/rooms/{roomType}', [AdminReservationController::class, 'getRooms']);
+    Route::post('/reservations/available-rooms', [AdminReservationController::class, 'getAvailableRooms']);
 //     // Gestión de Hoteles
 //     Route::get('/hotels', [AdminHotelController::class, 'index'])->name('admin.hotels');
 //     Route::get('/hotels/create', [AdminHotelController::class, 'create'])->name('admin.hotels.create');
