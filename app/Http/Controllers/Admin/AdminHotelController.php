@@ -48,7 +48,7 @@ class AdminHotelController extends Controller
 
         Hotel::create($validated);
 
-        return redirect()->route('admin.hotels')
+        return redirect()->route('admin.hotels.index')
             ->with('success', 'Hotel creado exitosamente.');
     }
 
@@ -90,7 +90,7 @@ class AdminHotelController extends Controller
 
         $hotel->update($validated);
 
-        return redirect()->route('admin.hotels')
+        return redirect()->route('admin.hotels.index')
             ->with('success', 'Hotel actualizado exitosamente.');
     }
 
@@ -104,7 +104,7 @@ class AdminHotelController extends Controller
 
         $hotel->delete();
 
-        return redirect()->route('admin.hotels')
+        return redirect()->route('admin.hotels.index')
             ->with('success', 'Hotel eliminado exitosamente.');
     }
 }

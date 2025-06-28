@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 class Review extends Model
 {
+    use HasFactory;
 
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'user_id',
         'hotel_id',
@@ -17,61 +22,45 @@ class Review extends Model
         'approved',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
-        'rating' => 'integer',
-        'approved' => 'boolean',
+        'rating' => 'decimal:1',
+        'approved' => 'integer',
     ];
 
-    // Relaciones
+    /**
+     * Get the user that owns the review.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the hotel that is reviewed.
+     */
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);
     }
 
-    // Scopes
+    /**
+     * Scope a query to only include approved reviews.
+     */
     public function scopeApproved($query)
     {
-        return $query->where('approved', true);
+        return $query->where('approved', 1);
     }
 
+    /**
+     * Scope a query to only include pending reviews.
+     */
     public function scopePending($query)
     {
-        return $query->where('approved', false);
-    }
-
-    public function scopeByRating($query, $rating)
-    {
-        return $query->where('rating', $rating);
-    }
-
-    public function scopeRecent($query)
-    {
-        return $query->orderBy('created_at', 'desc');
-    }
-
-    // Métodos
-    public function approve()
-    {
-        $this->update(['approved' => true]);
-    }
-
-    public function reject()
-    {
-        $this->delete();
-    }
-
-    public function getRatingStars()
-    {
-        return str_repeat('★', $this->rating) . str_repeat('☆', 5 - $this->rating);
-    }
-
-    public function canBeEditedBy(User $user)
-    {
-        return $this->user_id === $user->id && $this->created_at->isAfter(now()->subHours(24));
+        return $query->where('approved', 0);
     }
 }
