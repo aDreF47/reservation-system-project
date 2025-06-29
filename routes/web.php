@@ -150,7 +150,13 @@ Route::middleware(['auth', CheckAdminRole::class])->prefix('admin')->group(funct
     Route::put('/room-types/{roomType}', [AdminRoomTypeController::class, 'update'])->name('admin.room-types.update');
     Route::delete('/room-types/{roomType}', [AdminRoomTypeController::class, 'destroy'])->name('admin.room-types.destroy');
 
-
+    Route::get('/rooms', [AdminRoomController::class, 'index'])->name('admin.rooms.index');
+    Route::get('/rooms/create', [AdminRoomController::class, 'create'])->name('admin.rooms.create');
+    Route::post('/rooms', [AdminRoomController::class, 'store'])->name('admin.rooms.store');
+    Route::get('/rooms/{room}', [AdminRoomController::class, 'show'])->name('admin.rooms.show');
+    Route::get('/rooms/{room}/edit', [AdminRoomController::class, 'edit'])->name('admin.rooms.edit');
+    Route::put('/rooms/{room}', [AdminRoomController::class, 'update'])->name('admin.rooms.update');
+    Route::delete('/rooms/{room}', [AdminRoomController::class, 'destroy'])->name('admin.rooms.destroy');
 
 
     // Otras rutas...

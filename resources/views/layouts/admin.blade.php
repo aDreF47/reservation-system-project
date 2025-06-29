@@ -64,8 +64,8 @@
                     </a>
                     
                     <!-- Habitaciones -->
-                    <a href="#" 
-                       class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 {{ request()->routeIs('admin.rooms*') ? 'bg-blue-600 text-white' : '' }}">
+                    <a href="{{ route('admin.rooms.index') }}" 
+                    class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 {{ request()->routeIs('admin.rooms*') ? 'bg-blue-600 text-white' : '' }}">
                         <i class="fas fa-door-open w-5"></i>
                         <span class="ml-3">Habitaciones</span>
                     </a>
