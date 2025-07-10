@@ -87,8 +87,8 @@
                                         habitaciones</p>
 
                                     @if ($roomType->available_rooms_count > 0)
-                                        <a href="{{ route('room_types.show', $roomType) }}"
-                                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Ver
+                                            <a href="{{ route('room_types.show', [$hotel, $roomType->id]) }}"
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Ver
                                             detalles</a>
                                     @else
                                         <button class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"

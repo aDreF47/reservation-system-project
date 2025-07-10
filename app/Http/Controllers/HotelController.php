@@ -14,6 +14,7 @@ class HotelController extends Controller
         return view('public.hotels.index',compact('hotels'));//
     }
 
+    
     /**
      * Display the specified hotel with its room types.
      */
