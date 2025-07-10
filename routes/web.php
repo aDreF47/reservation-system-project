@@ -36,10 +36,14 @@ use App\Http\Controllers\Admin\AdminRoomTypeController;
 Route::get('/', [HomeController::class, 'index'])->name('home'); // hecho
 
 // Vista de hoteles públicos
-Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index'); // hecho
-Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
-Route::get('/hotels/{hotel}/type-room/{idtype}', [RoomTypeController::class, 'show'])->name('room_types.show');
-//Route::get('/hotels/{hotel}/type-room/{idtype}', [TypeRoomController::class, 'show'])->name('hotels.type-room');
+Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index'); // hecho // lista de hoteles
+Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show'); // dormitorios del hotel agrupados por tipo
+Route::get('/room-types/{roomType}', [RoomTypeController::class, 'show'])->name('room_types.show');
+Route::get('/reservations/create/{room}', [ReservationController::class, 'create'])->name('reservations.create');
+
+Route::post('/reservations/store', [ReservationController::class, 'store'])
+    ->middleware('auth')
+    ->name('reservations.store');
 
 
 /*
