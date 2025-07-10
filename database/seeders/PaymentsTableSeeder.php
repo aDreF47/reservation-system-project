@@ -48,7 +48,7 @@ class PaymentsTableSeeder extends Seeder
                     'reservation_id' => $reservation->id,
                     'amount' => $reservation->total_price,
                     'payment_method' => $paymentMethod,
-                    'transaction_id' => null,
+                    'transaction_id' => strtoupper(uniqid()),
                     'status' => 'pending',
                     'paid_at' => null,
                     'created_at' => Carbon::parse($reservation->created_at),

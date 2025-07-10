@@ -15,11 +15,6 @@
                     class="font-medium hover:text-gold-200 transition duration-300 border-b-2 border-transparent hover:border-gold-200 pb-1">Inicio</a>
                 <a href="/hotels"
                     class="font-medium hover:text-gold-200 transition duration-300 border-b-2 border-transparent hover:border-gold-200 pb-1">Hoteles</a>
-                <a href="/restaurants"
-                    class="font-medium hover:text-gold-200 transition duration-300 border-b-2 border-transparent hover:border-gold-200 pb-1">Restaurantes</a>
-                <a href="/venues"
-                    class="font-medium hover:text-gold-200 transition duration-300 border-b-2 border-transparent hover:border-gold-200 pb-1">Locales
-                    para Eventos</a>
                 <a href="/about"
                     class="font-medium hover:text-gold-200 transition duration-300 border-b-2 border-transparent hover:border-gold-200 pb-1">Acerca
                     de</a>
@@ -47,14 +42,13 @@
                         <div x-show="open" @click.away="open = false"
                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                             @if (Auth::user()->isAdmin())
-                                <a href={{route('admin.dashboard')}} class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Panel
-                                    Admin</a>
+                                <a href={{route('admin.dashboard')}} class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Panel Admin</a>
+                                <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Perfil</a>
                             @else
-                                <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi
-                                    Panel</a>
+                                <a href="{{ route('client.dashboard') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Panel</a>
+                                <a href="{{ route('client.reservations') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mis Reservaciones</a>
+                                <a href="{{ route('client.profile') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Perfil</a>
                             @endif
-
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Perfil</a>
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -109,12 +103,13 @@
                     @if (Auth::user()->isAdmin())
                         <a href="/admin/dashboard"
                             class="block text-white py-2 font-medium hover:bg-blue-700 rounded px-3">Panel Admin</a>
+                            <a href="#" class="block text-white py-2 font-medium hover:bg-blue-700 rounded px-3">Mi Perfil</a>
                     @else
                         <a href="/client/dashboard"
                             class="block text-white py-2 font-medium hover:bg-blue-700 rounded px-3">Mi Panel</a>
+                        <a href="{{ route('client.reservations') }}" class="block text-white py-2 font-medium hover:bg-blue-700 rounded px-3"">Mis Reservaciones</a>
+                        <a href="{{ route('client.profile') }}" class="block text-white py-2 font-medium hover:bg-blue-700 rounded px-3"">Mi Perfil</a>
                     @endif
-
-                    <a href="#" class="block text-white py-2 font-medium hover:bg-blue-700 rounded px-3">Mi Perfil</a>
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

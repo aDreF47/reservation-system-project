@@ -25,7 +25,10 @@ use App\Http\Controllers\Admin\AdminAdministratorController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminRoomTypeController;
 
+use App\Http\Controllers\Client\ClientDashboardController;
 
+use App\Http\Controllers\Client\ClientReservationController;
+use App\Http\Controllers\Client\ClientProfileController;
 /*
 |--------------------------------------------------------------------------
 | RUTAS PÚBLICAS
@@ -89,16 +92,20 @@ Route::post('/reviews', [ReviewController::class, 'store'])
 // |--------------------------------------------------------------------------
 // | RUTAS PROTEGIDAS PARA CLIENTES
 // |--------------------------------------------------------------------------
-// */
-/*// Route::middleware(['auth', 'role:cliente'])->prefix('user')->group(function () {
-//     // Reservaciones del cliente
-//     Route::get('/reservation', [ReservationController::class, 'index'])->name('user.reservations');
-//     Route::delete('/reservation/{id}', [ReservationController::class, 'destroy'])->name('user.reservation.delete');
+*/
+Route::middleware(['auth'])->prefix('client')->name('client.')->group(function () {
+    // Dashboard del cliente
+    Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+    // Reservaciones del cliente
+    Route::get('/reservations', [ClientReservationController::class, 'index'])->name('reservations');
+    Route::get('/reservations/{id}', [ClientReservationController::class, 'show'])->name('reservations.show');
+    Route::delete('/reservations/{id}', [ClientReservationController::class, 'cancel'])->name('reservations.cancel');
 
     // Perfil del cliente
-    Route::get('/profile', [ProfileController::class, 'show'])->name('user.profile');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
-});*/
+    Route::get('/profile', [ClientProfileController::class, 'edit'])->name('profile');
+    Route::put('/profile', [ClientProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ClientProfileController::class, 'updatePassword'])->name('profile.password');
+});
 
 // /*
 // |--------------------------------------------------------------------------

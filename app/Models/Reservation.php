@@ -23,6 +23,7 @@ class Reservation extends Model
         'total_price',
         'status',
         'payment_status',
+        'special_requests',
     ];
 
     /**

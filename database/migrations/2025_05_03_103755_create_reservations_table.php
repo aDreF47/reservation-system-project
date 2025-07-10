@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->enum('payment_status', ['pending', 'paid', 'refunded'])->default('pending');
+            $table->string('special_requests')->nullable();
             $table->timestamps();
 
             // Índices para mejorar búsquedas
