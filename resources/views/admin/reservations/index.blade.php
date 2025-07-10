@@ -289,7 +289,7 @@
     <!-- Tabla de Reservas -->
     <div class="reservations-table">
         <div class="table-header">
-            📧 Bandeja de Reservas ({{ $reservations->total() }} reservas)
+            📧 Bandeja de Reservasss ({{ $reservations->total() }} reservas)
         </div>
 
         @if($reservations->count() > 0)
