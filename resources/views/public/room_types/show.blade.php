@@ -1,13 +1,19 @@
 @extends('layouts.app')
 
 @section('title', 'Detalle de habitación - ' . $roomType->name)
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+
+
 
 @section('content')
+    @if (session('success'))
+        <div id="success-modal" class="reservation-modal" style="display: flex;">
+            <div class="reservation-modal-content" style="text-align: center;">
+                <span class="close-button" onclick="closeSuccessModal()">&times;</span>
+                <div style="font-size: 60px; color: green;">&#10004;</div>
+                <h3 style="margin-top: 10px;">{{ session('success') }}</h3>
+            </div>
+        </div>
+    @endif
     <link rel="stylesheet" href="{{ asset('css/roomtype.css') }}">
     <link rel="stylesheet" href="{{ asset('css/reservation.css') }}"> {{-- SOLO AQUÍ, NO EN CADA MODAL --}}
 
@@ -83,34 +89,47 @@
 
                                             <div class="form-group">
                                                 <label for="nombre_completo">Nombre completo del huésped:</label>
-                                                <input type="text" name="nombre_completo" id="nombre_completo" required>
+                                                <input type="text" name="nombre_completo" id="nombre_completo"
+                                                    value="{{ old('nombre_completo') }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Correo electrónico:</label>
-                                                <input type="email" name="email" id="email" required>
+                                                <input type="email" name="email" id="email" value="{{ old('email') }}"
+                                                    required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="telefono">Teléfono:</label>
-                                                <input type="tel" name="telefono" id="telefono" required>
+                                                <input type="tel" name="telefono" id="telefono"
+                                                    value="{{ old('telefono') }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="check_in">Fecha de ingreso:</label>
-                                                <input type="date" name="check_in" id="check_in" required>
+                                                <input type="date" name="check_in" id="check_in" min="{{ date('Y-m-d') }}"
+                                                    value="{{ old('check_in') }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="check_out">Fecha de salida:</label>
-                                                <input type="date" name="check_out" id="check_out" required>
+                                                <input type="date" name="check_out" id="check_out"
+                                                    value="{{ old('check_out') }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="cantidad_huespedes">Cantidad de huéspedes:</label>
-                                                <input type="number" name="cantidad_huespedes" id="cantidad_huespedes"
-                                                    min="1" value="1" required>
+                                                <input type="number" name="guest" id="guest" min="1"
+                                                    max="{{ $roomType->capacity }}" value="1" required>
+                                                <small>(Máximo permitido: {{ $roomType->capacity }} personas)</small>
+
                                             </div>
                                             <div class="form-group">
                                                 <label for="total_price">Precio total :</label>
                                                 <input type="text" id="total_price_{{ $room->id }}" readonly
                                                     style="background-color: #f0f0f0;">
                                             </div>
+                                            @if (session('error') && (int) old('room_id') === $room->id)
+                                                <div class="alert alert-danger" style="margin-top: 10px;">
+                                                    {{ session('error') }}
+                                                </div>
+                                            @endif
+
                                             <button type="submit" class="btn btn-success">Confirmar Reserva</button>
                                         </form>
                                     </div>
@@ -194,7 +213,23 @@
         function closeLoginAlert() {
             document.getElementById('login-alert-modal').style.display = 'none';
         }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').style.display = 'none';
+        }
     </script>
+    <script>
+        @if (session('error') && old('room_id'))
+            window.onload = function() {
+                const roomId = {{ old('room_id') }};
+                const modal = document.getElementById(`modal-${roomId}`);
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            };
+        @endif
+    </script>
+
 
 
 @endsection
