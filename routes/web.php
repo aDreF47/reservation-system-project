@@ -10,7 +10,7 @@ use App\Http\Controllers\RoomTypeController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
-
+use App\Http\Controllers\Admin\MirrorController;
 use App\Http\Middleware\CheckAdminRole;
 
 // Controladores del panel de administración
@@ -108,26 +108,34 @@ Route::middleware(['auth', CheckAdminRole::class])->prefix('admin')->group(funct
 
     // Gestión de Reservaciones
     Route::get('/reservation', [AdminReservationController::class, 'index'])->name('admin.reservations');
-//     Route::get('/reservation/{id}', [AdminReservationController::class, 'show'])->name('admin.reservation.show');
-//     Route::delete('/reservation/{id}', [AdminReservationController::class, 'destroy'])->name('admin.reservation.delete');
+    //     Route::get('/reservation/{id}', [AdminReservationController::class, 'show'])->name('admin.reservation.show');
+    //     Route::delete('/reservation/{id}', [AdminReservationController::class, 'destroy'])->name('admin.reservation.delete');
+    // ======================================================================
+    // NUEVAS RUTAS PARA MIRROR -
+    // ======================================================================
+    Route::get('/mirrors', [MirrorController::class, 'index'])->name('admin.mirrors.index');
+    Route::post('/mirrors/generate', [MirrorController::class, 'generate'])->name('admin.mirrors.generate');
+    Route::post('/mirrors/search', [MirrorController::class, 'search'])->name('admin.mirrors.search');
+    Route::get('/mirrors/download/{table}/{timestamp}', [MirrorController::class, 'download'])->name('admin.mirrors.download');
+    Route::delete('/mirrors/{timestamp}', [MirrorController::class, 'delete'])->name('admin.mirrors.delete');
+    Route::post('/mirrors/cleanup', [MirrorController::class, 'cleanup'])->name('admin.mirrors.cleanup');
+    //     // Gestión de Hoteles
+    //     Route::get('/hotels', [AdminHotelController::class, 'index'])->name('admin.hotels');
+    //     Route::get('/hotels/create', [AdminHotelController::class, 'create'])->name('admin.hotels.create');
+    //     Route::post('/hotels', [AdminHotelController::class, 'store'])->name('admin.hotels.store');
+    //     Route::get('/hotels/{id}', [AdminHotelController::class, 'show'])->name('admin.hotels.show');
+    //     Route::get('/hotels/{id}/edit', [AdminHotelController::class, 'edit'])->name('admin.hotels.edit');
+    //     Route::put('/hotels/{id}', [AdminHotelController::class, 'update'])->name('admin.hotels.update');
+    //     Route::delete('/hotels/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotels.delete');
 
-//     // Gestión de Hoteles
-//     Route::get('/hotels', [AdminHotelController::class, 'index'])->name('admin.hotels');
-//     Route::get('/hotels/create', [AdminHotelController::class, 'create'])->name('admin.hotels.create');
-//     Route::post('/hotels', [AdminHotelController::class, 'store'])->name('admin.hotels.store');
-//     Route::get('/hotels/{id}', [AdminHotelController::class, 'show'])->name('admin.hotels.show');
-//     Route::get('/hotels/{id}/edit', [AdminHotelController::class, 'edit'])->name('admin.hotels.edit');
-//     Route::put('/hotels/{id}', [AdminHotelController::class, 'update'])->name('admin.hotels.update');
-//     Route::delete('/hotels/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotels.delete');
-
-// Users
+    // Users
     Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');           // listar usuarios
     Route::get('/users/create', [AdminUserController::class, 'create'])->name('admin.users.create');  // formulario crear usuario
     Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');          // guardar nuevo usuario
     Route::get('/users/{id}', [AdminUserController::class, 'show'])->name('admin.users.show');       // mostrar usuario
     Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');  // formulario editar usuario
     Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');    // actualizar usuario
-    Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');// eliminar usuario
+    Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy'); // eliminar usuario
 
     // administrator
     Route::get('/administrators', [AdminAdministratorController::class, 'index'])->name('admin.administrators.index');           // listar administrator
@@ -136,7 +144,7 @@ Route::middleware(['auth', CheckAdminRole::class])->prefix('admin')->group(funct
     Route::get('/administrators/{id}', [AdminAdministratorController::class, 'show'])->name('admin.administrators.show');       // mostrar rol
     Route::get('/administrators/{id}/edit', [AdminAdministratorController::class, 'edit'])->name('admin.administrators.edit');  // formulario editar rol
     Route::put('/administrators/{id}', [AdminAdministratorController::class, 'update'])->name('admin.administrators.update');    // actualizar rol
-    Route::delete('/administrators/{id}', [AdminAdministratorController::class, 'destroy'])->name('admin.administrators.destroy');// eliminar rol
+    Route::delete('/administrators/{id}', [AdminAdministratorController::class, 'destroy'])->name('admin.administrators.destroy'); // eliminar rol
 
     // Mostrar formulario para ver o editar perfil
     Route::get('/profile', [AdminProfileController::class, 'edit'])->name('admin.profile');
